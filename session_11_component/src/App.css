@@ -1,0 +1,13 @@
+.expenses {
+    background-color: rgb(31, 31, 31);
+    padding: 20px 10px;
+    margin: 2rem auto;
+    width: 50rem;
+    max-width: 95%;
+}
+
+body {
+    font-family: sans-serif;
+    background-color: #3f3f3f;
+    margin: 0;
+}
