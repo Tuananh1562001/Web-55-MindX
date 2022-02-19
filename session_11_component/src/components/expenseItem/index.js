@@ -1,11 +1,15 @@
+import { useState } from "react";
 import Card from "../card";
 import "./index.css"
 
 const ExpenseItem = (props) => {
   // console.log(props)
+
   const onAmountClick = () => {
     console.log(props.amount)
   }
+
+
   return (
     <Card className="expense-item__container">
         <ExpenseDate date={props.date} />
