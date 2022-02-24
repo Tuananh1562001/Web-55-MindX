@@ -4,17 +4,11 @@ import "./index.css"
 
 const ExpenseItem = (props) => {
   // console.log(props)
-
-  const onAmountClick = () => {
-    console.log(props.amount)
-  }
-
-
   return (
     <Card className="expense-item__container">
         <ExpenseDate date={props.date} />
       <div className="expense-item__title">{props.title}</div>
-      <div className="expense-item__amount" onClick={onAmountClick}>${props.amount}</div>
+      <div className="expense-item__amount">${props.amount}</div>
     </Card>
   );
 };

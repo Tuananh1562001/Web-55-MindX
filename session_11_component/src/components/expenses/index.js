@@ -1,27 +1,50 @@
+import { useState } from "react";
 import ExpenseItem from "../expenseItem";
 import Card from "../card";
+import Chart from "../chart";
+import "./index.css"
 
 const Expenses = (props) => {
-  const expenseItems = props.expenseItems
-    return (
-      <Card className="expenses">
-        <ExpenseItem
-          date={expenseItems[0].date}
-          title={expenseItems[0].title}
-          amount={expenseItems[0].amount}
-        />
-        <ExpenseItem
-          date={expenseItems[1].date}
-          title={expenseItems[1].title}
-          amount={expenseItems[1].amount}
-        />
-        <ExpenseItem
-          date={expenseItems[2].date}
-          title={expenseItems[2].title}
-          amount={expenseItems[2].amount}
-        />
-      </Card>
-    );
+  const expenseItems = props.expenseItems;
+  const [selectedYear, setSelectedYear] = useState("2022")
+
+  const handleOnYearChange = (event) => {
+    setSelectedYear(event.target.value)
+  }
+
+  const filteredExpenseItems = expenseItems.filter((item) => {
+    return item.date.getFullYear() === Number(selectedYear)
+  })
+
+  let totalAmount = 0;
+  for (let i = 0; i < expenseItems.length; i++) {
+    totalAmount = totalAmount + expenseItems[i].amount;
+  }
+  return (
+    <Card className="expenses">
+      <div style={{ color: "white" }}>{totalAmount}</div>
+      <div className="expense-filter">
+        <span>Filter by year</span>
+        <select value={selectedYear} onChange={handleOnYearChange}>
+          <option value={2020}>2020</option>
+          <option value={2021}>2021</option>
+          <option value={2022}>2022</option>
+          <option value={2023}>2023</option>
+        </select>
+      </div>
+      <Chart/>
+      {filteredExpenseItems.map((item) => {
+        return (
+          <ExpenseItem
+            key={item.id}
+            date={item.date}
+            title={item.title}
+            amount={item.amount}
+          />
+        );
+      })}
+    </Card>
+  );
 };
 
 export default Expenses;

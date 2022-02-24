@@ -1,11 +1,16 @@
 import { useState } from "react";
+import Card from "../card";
+import "./index.css";
 /* State trong React 
     const [anotherCount, setAnotherCount] = useState(1)
     const [arr, setArr] = useState(["hello", "world"])
     const [obj, setObj] = useState({hello: "world"})
     console.log(arr)
 */
-const Form = () => {
+const Form = (props) => {
+  // console.log(props)
+  const [formVisible, setFormVisible] = useState();
+
   const [formValue, setFormValue] = useState({
     title: "",
     date: "",
@@ -14,8 +19,8 @@ const Form = () => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    console.log(formValue);
-    resetForm()
+    props.onSubmit(formValue)
+    resetForm();
   };
 
   const resetForm = () => {
@@ -24,6 +29,7 @@ const Form = () => {
       date: "",
       amount: 0,
     });
+    setFormVisible(false);
   };
 
   const handleFormValueChange = (event) => {
@@ -33,15 +39,27 @@ const Form = () => {
     // });
 
     setFormValue((prev) => {
-        return {
-            ...prev,
-            [event.target.name]: event.target.value
-        }
-    })
+      return {
+        ...prev,
+        [event.target.name]: event.target.value,
+      };
+    });
   };
 
+  const showForm = () => {
+    setFormVisible(true);
+  };
+
+  if (!formVisible) {
+    return (
+      <Card className="form__container">
+        <button  onClick={showForm}>New expense</button>
+      </Card>
+    );
+  }
+
   return (
-    <div className="form__container">
+    <Card className="form__container">
       <form onSubmit={handleFormSubmit} onReset={resetForm} className="form">
         <div className="form-input__container">
           <div className="form-input__item">
@@ -72,12 +90,12 @@ const Form = () => {
             />
           </div>
         </div>
-        <div className="form-action">
+        <div className="form-actions">
           <button type="submit">Add Expenses</button>
           <button type="reset">Cancel</button>
         </div>
       </form>
-    </div>
+    </Card>
   );
 };
 
