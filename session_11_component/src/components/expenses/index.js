@@ -15,14 +15,8 @@ const Expenses = (props) => {
   const filteredExpenseItems = expenseItems.filter((item) => {
     return item.date.getFullYear() === Number(selectedYear)
   })
-
-  let totalAmount = 0;
-  for (let i = 0; i < expenseItems.length; i++) {
-    totalAmount = totalAmount + expenseItems[i].amount;
-  }
   return (
     <Card className="expenses">
-      <div style={{ color: "white" }}>{totalAmount}</div>
       <div className="expense-filter">
         <span>Filter by year</span>
         <select value={selectedYear} onChange={handleOnYearChange}>
@@ -32,7 +26,7 @@ const Expenses = (props) => {
           <option value={2023}>2023</option>
         </select>
       </div>
-      <Chart/>
+      <Chart data={filteredExpenseItems}/>
       {filteredExpenseItems.map((item) => {
         return (
           <ExpenseItem
