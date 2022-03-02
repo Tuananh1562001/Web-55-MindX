@@ -10,3 +10,8 @@
     font-weight: bold;
     border-radius: 6px;
 }
+.expense-nodata {
+    padding: 1rem;
+    text-align: center;
+    color: white;
+}

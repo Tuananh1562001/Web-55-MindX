@@ -27,7 +27,7 @@ const Expenses = (props) => {
         </select>
       </div>
       <Chart data={filteredExpenseItems}/>
-      {filteredExpenseItems.map((item) => {
+      {filteredExpenseItems.length > 0 ? (filteredExpenseItems.map((item) => {
         return (
           <ExpenseItem
             key={item.id}
@@ -36,7 +36,8 @@ const Expenses = (props) => {
             amount={item.amount}
           />
         );
-      })}
+      })
+      ) : (<div className="expense-nodata">(No data)</div>)}
     </Card>
   );
 };

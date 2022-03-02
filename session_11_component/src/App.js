@@ -9,7 +9,8 @@ function App() {
       id: Math.random() * 1000,
       date: new Date("2020-02-11"), 
       title: "New Phone",
-      amount: 800 },
+      amount: 800,
+    },
     {
       id: Math.random() * 1000,
       date: new Date("2021-03-20"),
