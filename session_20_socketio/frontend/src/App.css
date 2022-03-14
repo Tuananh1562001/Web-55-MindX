@@ -1,0 +1,47 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.App {
+    height: 100vh;
+    display: flex;
+    align-items: stretch;
+}
+
+.games-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.players-queue {
+    width: 400px;
+    border-left: 1px solid #ececec;
+}
+.game-board {
+    margin: 50px 0px;
+}
+
+.game-board  .row{
+    display: flex;
+}
+
+.row  .cell {
+    border: 1px solid #999999;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #555555;
+    font-size: 36px;
+    user-select: none;
+}
+
+.row .cell:hover{
+    background-color: #999999;
+}

@@ -39,7 +39,7 @@ function App() {
       ]
     })
   }
-
+  
   return (
     <div>
       <Form onSubmit={handleAddExpenses} />
