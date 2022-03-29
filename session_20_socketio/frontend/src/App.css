@@ -22,24 +22,26 @@ body{
     width: 400px;
     border-left: 1px solid #ececec;
 }
+
 .game-board {
     margin: 50px 0px;
 }
 
-.game-board  .row{
+.game-board > .row{
     display: flex;
 }
 
 .row  .cell {
     border: 1px solid #999999;
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #555555;
-    font-size: 36px;
+    font-size: 72px;
     user-select: none;
+    cursor: pointer;
 }
 
 .row .cell:hover{
