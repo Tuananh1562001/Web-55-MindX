@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { io } from "socket.io-client"
 import "./App.css";
 
 const determineResult = (board) => {
@@ -45,6 +46,7 @@ const determineResult = (board) => {
       [2, 0],
     ],
   ];
+
   for (let i = 0; i < combinations.length; i++) {
     const combination = combinations[i];
     const [cell1, cell2, cell3] = combination;
@@ -67,12 +69,11 @@ const determineResult = (board) => {
     ) {
       return "O";
     }
-
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        if (board[i][j] === "") {
-          return null;
-        }
+  }
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      if (board[i][j] === "") {
+        return null;
       }
     }
   }
@@ -86,6 +87,8 @@ function App() {
     ["", "", ""],
   ]);
   const [turn, setTurn] = useState("X");
+  const [username, setUsername] = useState("")
+  const [onlineCount, setOnlineCount] = useState(0)
 
   const handleMove = (rowIdx, cellIdx) => {
     // console.log(rowIdx, cellIdx)
@@ -99,8 +102,30 @@ function App() {
     setTurn((pre) => (pre === "X" ? "O" : "X"));
   };
 
+  const handleSubmit = (event) => {
+    setUsername(document.getElementById('username').value)
+  }
+
   const result = determineResult(board);
-  console.log(result);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5002")
+    socket.on("ONLINE_COUNT", (onlineCount) => {
+      setOnlineCount(onlineCount)
+    })
+  }, [])
+
+  if(!username){
+    return (
+      <div>
+        <p>Online count: {onlineCount}</p>
+        <form onSubmit={() => handleSubmit()}>
+            <input type="text" id="username" />
+            <button type="submit">Join</button>
+        </form>
+      </div>
+    )
+  }
 
   return (
     <div className="App">
