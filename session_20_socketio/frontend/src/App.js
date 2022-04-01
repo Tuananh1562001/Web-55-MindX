@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client"
 import "./App.css";
 
@@ -89,6 +89,13 @@ function App() {
   const [turn, setTurn] = useState("X");
   const [username, setUsername] = useState("")
   const [onlineCount, setOnlineCount] = useState(0)
+  const [player, SetPlayer] = useState({
+    player1: "",
+    player2: "",
+    queueingPlayers:[],
+  })
+
+  const socketRef = useRef(null)
 
   const handleMove = (rowIdx, cellIdx) => {
     // console.log(rowIdx, cellIdx)
@@ -103,15 +110,20 @@ function App() {
   };
 
   const handleSubmit = (event) => {
+    socketRef.current = document.getElementById("username").value
     setUsername(document.getElementById('username').value)
+    socketRef.current.emit("SET_USERNAME", username)
   }
 
   const result = determineResult(board);
 
   useEffect(() => {
-    const socket = io("http://localhost:5002")
-    socket.on("ONLINE_COUNT", (onlineCount) => {
+    socketRef.current = io("http://localhost:5002")
+    socketRef.current.on("ONLINE_COUNT", (onlineCount) => {
       setOnlineCount(onlineCount)
+    })
+    socketRef.current.on("PLAYERS_CHANGED", (players) => {
+      console.log(players)
     })
   }, [])
 
@@ -130,7 +142,7 @@ function App() {
   return (
     <div className="App">
       <div className="games-area">
-        <div>Player 1</div>
+        <div>{player.player1 ? player.player1 : "<Not set>"}</div>
         <div className="game-board">
           {board.map((row, rowIdx) => {
             return (
@@ -152,7 +164,7 @@ function App() {
             );
           })}
         </div>
-        <div>Player 2</div>
+        <div>{player.player2 ? player.player2 : "<Not set>"}</div>
       </div>
       <div className="players-queue">Player Queue</div>
     </div>
