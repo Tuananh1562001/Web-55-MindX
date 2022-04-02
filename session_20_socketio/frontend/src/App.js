@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { io } from "socket.io-client"
+import { io } from "socket.io-client";
 import "./App.css";
 
 const determineResult = (board) => {
@@ -87,15 +87,15 @@ function App() {
     ["", "", ""],
   ]);
   const [turn, setTurn] = useState("X");
-  const [username, setUsername] = useState("")
-  const [onlineCount, setOnlineCount] = useState(0)
-  const [player, SetPlayer] = useState({
+  const [username, setUsername] = useState("");
+  const [onlineCount, setOnlineCount] = useState(0);
+  const [players, SetPlayers] = useState({
     player1: "",
     player2: "",
-    queueingPlayers:[],
-  })
+    queueingPlayers: [],
+  });
 
-  const socketRef = useRef(null)
+  const socketRef = useRef(null);
 
   const handleMove = (rowIdx, cellIdx) => {
     // console.log(rowIdx, cellIdx)
@@ -110,39 +110,42 @@ function App() {
   };
 
   const handleSubmit = (event) => {
-    socketRef.current = document.getElementById("username").value
-    setUsername(document.getElementById('username').value)
-    socketRef.current.emit("SET_USERNAME", username)
-  }
+    const username = document.getElementById("username").value;
+    setUsername(username);
+    socketRef.current.emit("SET_USERNAME", username);
+  };
 
   const result = determineResult(board);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:5002")
+    socketRef.current = io("http://localhost:5002");
     socketRef.current.on("ONLINE_COUNT", (onlineCount) => {
-      setOnlineCount(onlineCount)
-    })
+      setOnlineCount(onlineCount);
+    });
     socketRef.current.on("PLAYERS_CHANGED", (players) => {
-      console.log(players)
-    })
-  }, [])
+      SetPlayers(players);
+    });
+  }, []);
 
-  if(!username){
+  if (!username) {
     return (
       <div>
         <p>Online count: {onlineCount}</p>
-        <form onSubmit={() => handleSubmit()}>
-            <input type="text" id="username" />
-            <button type="submit">Join</button>
+        <form onSubmit={handleSubmit}>
+          <input type="text" id="username" />
+          <button type="submit">Join</button>
         </form>
       </div>
-    )
+    );
   }
 
   return (
     <div className="App">
       <div className="games-area">
-        <div>{player.player1 ? player.player1 : "<Not set>"}</div>
+        <div>
+          {players.player1 ? players.player1 : "<Not set>"}
+          <span>{players.player1 === username ? "me" : ""}</span>
+        </div>
         <div className="game-board">
           {board.map((row, rowIdx) => {
             return (
@@ -164,9 +167,13 @@ function App() {
             );
           })}
         </div>
-        <div>{player.player2 ? player.player2 : "<Not set>"}</div>
+        <div>{players.player2 ? players.player2 : "<Not set>"}</div>
       </div>
-      <div className="players-queue">Player Queue</div>
+      <div className="players-queue">
+        {players.queueingPlayers.map((username) => (
+          <div key={username}>{username}</div>
+        ))}
+      </div>
     </div>
   );
 }
